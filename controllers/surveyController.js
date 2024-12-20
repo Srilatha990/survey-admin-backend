@@ -83,3 +83,35 @@ exports.deleteSurvey = async (req, res) => {
     res.status(500).json({ success: false, message: 'Error deleting survey', error: error.message });
   }
 };
+
+
+// In your controller.js file
+exports.validateAnswers = async (req, res) => {
+  const { id } = req.params;
+  const { answers } = req.body;
+
+  try {
+    const survey = await Survey.findById(id);
+    if (!survey) {
+      return res.status(404).json({ success: false, message: 'Survey not found' });
+    }
+
+    let correctAnswersCount = 0;
+
+    // Loop through the answers and compare with the survey's questions' answers
+    survey.questions.forEach((question) => {
+      if (answers[question._id] && question.answers.includes(answers[question._id])) {
+        correctAnswersCount++;
+      }
+    });
+
+    if (correctAnswersCount === survey.questions.length) {
+      return res.status(200).json({ correct: true });
+    } else {
+      return res.status(200).json({ correct: false });
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error validating answers', error: error.message });
+  }
+};
+

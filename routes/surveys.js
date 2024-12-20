@@ -8,5 +8,7 @@ router.get('/', surveyController.getAllSurveys);       // Get all surveys
 router.get('/:id', surveyController.getSurveyById);    // Get a survey by ID
 router.put('/:id', surveyController.updateSurvey);     // Update a survey by ID
 router.delete('/:id', surveyController.deleteSurvey);  // Delete a survey by ID
+router.post('/:id/validate', surveyController.validateAnswers); // Validate answers
+
 
 module.exports = router;
